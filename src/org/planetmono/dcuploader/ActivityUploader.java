@@ -71,7 +71,6 @@ import android.media.ExifInterface;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
 import android.provider.MediaStore;
@@ -319,11 +318,6 @@ public class ActivityUploader extends Activity {
 		b.recycle();
 
 		return resized;
-	}
-
-	private Bitmap getBitmapThumbnail(Bitmap orig) {
-		return BitmapHelper.getResizedBitmap(orig, 64,
-				BitmapHelper.Axis.Vertical, 0);
 	}
 
 	private void reloadConfigurations() {
@@ -985,7 +979,11 @@ public class ActivityUploader extends Activity {
 				try {
 					tempFile = File.createTempFile("dcuploader_photo_", ".jpg");
 				} catch (IOException e) {
+					Toast.makeText(ActivityUploader.this, "임시 파일을 만들 수 없습니다.", Toast.LENGTH_SHORT).show();
+					
 					tempFile = null;
+					
+					return;
 				}
 
 				Intent i = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
@@ -1120,11 +1118,24 @@ public class ActivityUploader extends Activity {
 	/*
 	 * UI definition
 	 */
+	
+	@Override
+	protected void onSaveInstanceState(Bundle outState) {
+		super.onSaveInstanceState(outState);
+		
+		if (tempFile != null)
+			outState.putString("tempfile", tempFile.getAbsolutePath());
+	}
 
 	@SuppressWarnings("unchecked")
 	@Override
 	public void onCreate(Bundle savedState) {
 		super.onCreate(savedState);
+		
+		if (savedState != null) {
+			if (savedState.containsKey("tempfile"))
+				tempFile = new File(savedState.getString("tempfile"));
+		}
 
 		initViews();
 		if (formLocation)
@@ -1228,8 +1239,10 @@ public class ActivityUploader extends Activity {
 	}
 
 	@Override
-	public void onStop() {
-		super.onStop();
+	public void onDestroy() {
+		super.onDestroy();
+		
+		Log.d(Application.TAG, "stopping activity.");
 
 		/* stop location query when going out */
 		if (locationEnabled) {
@@ -1306,6 +1319,7 @@ public class ActivityUploader extends Activity {
 
 					bitmap.recycle();
 				} */else {
+					/* take photo */
 					selectedImage = Uri.fromFile(tempFile);
 					tempFiles.add(tempFile.getAbsolutePath());
 					tbm = getBitmapThumbnail(selectedImage);
