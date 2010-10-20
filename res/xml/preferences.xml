@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+	<PreferenceCategory android:key="sign_on_settings" android:title="로그인 설정">
+		<CheckBoxPreference android:title="아이디 및 패스워드 저장" android:defaultValue="false" android:key="save_id_password"></CheckBoxPreference>
+		<CheckBoxPreference android:title="자동 로그인" android:defaultValue="false" android:key="auto_sign_on" android:dependency="save_id_password"></CheckBoxPreference>
+	</PreferenceCategory>
+	<PreferenceCategory android:key="gallery_settings" android:title="갤러리 설정">
+		<Preference android:summary="갤러리 목록에서 개별 항목을 지우거나 고정짤방을 등록합니다." android:key="edit_gallery_list" android:title="갤러리 목록 수정"></Preference>
+		<Preference android:summary="등록한 갤러리 목록의 항목을 모두 지웁니다." android:key="wipe_gallery_list" android:title="내 갤러리 목록 지우기"></Preference>
+	</PreferenceCategory>
+	<PreferenceCategory android:key="picture_settings" android:title="사진 업로더 설정">
+		<ListPreference android:title="이미지 리사이징" android:summary="이미지의 용량을 줄이기 위해 리사이징할 이미지의 최소 용량을 설정합니다." android:key="image_resize_threshold" android:entries="@array/image_size_threshold_entries" android:entryValues="@array/image_size_threshold_entry_values"></ListPreference>
+		<ListPreference android:title="이미지 최대 크기" android:summary="이미지 리사이징시 가로, 세로 최대 이미지 크기를 설정합니다." android:key="maximum_resolution" android:entries="@array/image_resize_resolution_entries" android:entryValues="@array/image_resize_resolution_entry_values"></ListPreference>
+		<ListPreference android:title="이미지 퀄리티" android:summary="리사이징 시 JPEG 이미지의 퀄리티를 설정합니다." android:key="image_quality" android:entries="@array/image_quality_entries" android:entryValues="@array/image_quality_entry_values"></ListPreference>
+	</PreferenceCategory>
+	<PreferenceCategory android:key="downloader_settings" android:title="다운로더 설정">
+		<EditTextPreference android:summary="이미지의 다운로드 경로를 설정합니다." android:title="다운로드 경로" android:key="download_path" android:defaultValue="dcdownloader"></EditTextPreference><CheckBoxPreference android:defaultValue="true" android:summary="다운로드받은 이미지를 미디어 라이브러리에 추가합니다." android:title="미디어 라이브러리에 추가" android:key="add_to_provider"></CheckBoxPreference>
+	</PreferenceCategory>
+	<PreferenceCategory android:title="기타 설정" android:key="etc_settings">
+		<ListPreference android:summary="디시인사이드의 모바일 페이지 제공자를 선택합니다." android:key="mobile_page_provider" android:title="모바일 서비스 제공자" android:entryValues="@array/mobile_provider_values" android:entries="@array/mobile_providers"></ListPreference>
+		<ListPreference android:entryValues="@array/destination_values" android:key="destination" android:entries="@array/destinations" android:summary="'가기' 버튼을 눌렀을 시 바로 연결되는 서비스를 선택합니다." android:title="기본 서비스 선택"></ListPreference>
+		<CheckBoxPreference android:defaultValue="false" android:summary="언제나 현재 위치 정보를 글에 삽입합니다." android:title="항상 위치 첨부" android:key="always_enclose_position"></CheckBoxPreference>
+		<CheckBoxPreference android:key="always_enclose_model" android:defaultValue="false" android:title="항상 단말기 정보 첨부" android:summary="언제나 현재 사용중인 단말기의 정보를 글에 삽입합니다."></CheckBoxPreference>
+	</PreferenceCategory>
+	<PreferenceCategory android:title="정보" android:key="pref_info">
+		<Preference android:summary="@string/version" android:key="version" android:title="버젼" android:selectable="false"></Preference>
+		<Preference android:key="about_this_app" android:title="이 프로그램은..."></Preference>
+	</PreferenceCategory>
+</PreferenceScreen>

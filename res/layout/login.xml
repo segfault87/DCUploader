@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout android:id="@+id/LinearLayout01" android:layout_width="fill_parent" android:layout_height="fill_parent" xmlns:android="http://schemas.android.com/apk/res/android" android:orientation="vertical" android:padding="10dip" android:gravity="center_vertical|center_horizontal">
+	<LinearLayout android:id="@+id/LinearLayout02" android:layout_width="wrap_content" android:layout_height="wrap_content">
+		<TextView android:id="@+id/TextView01" android:layout_height="wrap_content" android:layout_width="75dip" android:text="아이디"></TextView>
+		<EditText android:layout_height="wrap_content" android:layout_width="150dip" android:id="@+id/signon_id" android:singleLine="true"></EditText>
+	</LinearLayout>
+	<LinearLayout android:id="@+id/LinearLayout03" android:layout_width="wrap_content" android:layout_height="wrap_content">
+		<TextView android:id="@+id/TextView02" android:layout_height="wrap_content" android:text="패스워드" android:layout_width="75dip"></TextView>
+		<EditText android:layout_height="wrap_content" android:layout_width="150dip" android:inputType="textPassword" android:id="@+id/signon_pw"></EditText>
+	</LinearLayout>
+	<CheckBox android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="아이디/패스워드 저장" android:id="@+id/signon_saveidpw"></CheckBox>
+	<Button android:layout_width="wrap_content" android:text="로그인" android:width="100dip" android:layout_height="wrap_content" android:id="@+id/signon_login"></Button>
+</LinearLayout>

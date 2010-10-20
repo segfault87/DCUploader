@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="fill_parent" android:orientation="vertical" android:layout_height="fill_parent">
+	<LinearLayout android:id="@+id/LinearLayout01" android:layout_height="wrap_content" android:layout_width="fill_parent">
+		<EditText android:layout_width="wrap_content" android:layout_height="wrap_content" android:hint="검색어 입력" android:id="@+id/gallery_chooser_edit" android:layout_weight="1" android:maxLines="1" android:singleLine="true"></EditText>
+		<Button android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/gallery_chooser_search" android:text="검색"></Button>
+	</LinearLayout>
+	<ListView android:layout_width="fill_parent" android:id="@+id/gallery_chooser_list" android:layout_height="fill_parent" android:layout_weight="1"></ListView>
+	<RelativeLayout android:id="@+id/RelativeLayout01" android:layout_height="wrap_content" android:background="@android:drawable/bottom_bar" android:layout_width="fill_parent">
+		<Button android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/gallery_chooser_ok" android:text="확인" android:layout_alignParentLeft="true" android:layout_centerVertical="true" android:layout_marginLeft="30dip" android:minWidth="100dip"></Button>
+		<Button android:layout_toRightOf="@+id/Button01" android:layout_height="wrap_content" android:layout_width="wrap_content" android:id="@+id/gallery_chooser_cancel" android:text="취소" android:layout_centerVertical="true" android:layout_alignParentRight="true" android:layout_marginRight="30dip" android:minWidth="100dip"></Button>
+	</RelativeLayout>
+</LinearLayout>

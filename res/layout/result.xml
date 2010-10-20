@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout android:id="@+id/LinearLayout04" android:layout_height="fill_parent" android:layout_width="fill_parent" xmlns:android="http://schemas.android.com/apk/res/android" android:orientation="vertical">
+	<ScrollView android:id="@+id/ScrollView01" android:layout_width="fill_parent" android:layout_weight="1" android:layout_height="fill_parent">
+		<LinearLayout android:id="@+id/LinearLayout01" android:layout_height="wrap_content" android:orientation="vertical" android:layout_width="fill_parent" android:gravity="center">
+			<TextView android:id="@+id/TextView01" android:layout_width="wrap_content" android:layout_height="wrap_content" android:textSize="25px" android:layout_marginTop="30dip" android:layout_marginBottom="15dip" android:text="업로드 성공."></TextView>
+			<TableLayout android:id="@+id/TableLayout01" android:layout_width="wrap_content" android:layout_height="wrap_content">
+				<TableRow android:id="@+id/TableRow01" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginBottom="10dip">
+					<TextView android:id="@+id/TextView02" android:layout_width="wrap_content" android:layout_height="wrap_content" android:gravity="center" android:minWidth="150dip" android:text="PC 버젼"></TextView>
+					<TextView android:id="@+id/result_mobile_text" android:layout_width="wrap_content" android:layout_height="wrap_content" android:minWidth="150dip" android:text="모바일 버전"></TextView>
+				</TableRow>
+				<TableRow android:id="@+id/TableRow02" android:layout_width="wrap_content" android:layout_height="wrap_content">
+					<Button android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/result_pc_open_link" android:text="브라우저 열기"></Button>
+					<Button android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/result_mobile_open_link" android:text="브라우저 열기"></Button>
+				</TableRow>
+				<TableRow android:id="@+id/TableRow03" android:layout_width="wrap_content" android:layout_height="wrap_content">
+					<Button android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/result_pc_copy" android:text="클립보드에 복사"></Button>
+					<Button android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/result_mobile_copy" android:text="클립보드에 복사"></Button>
+				</TableRow>
+				<TableRow android:id="@+id/TableRow04" android:layout_width="wrap_content" android:layout_height="wrap_content">
+					<Button android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/result_pc_share" android:text="링크 공유"></Button>
+					<Button android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/result_mobile_share" android:text="링크 공유"></Button>
+				</TableRow>
+			</TableLayout>
+		</LinearLayout>
+	</ScrollView>
+	<RelativeLayout android:id="@+id/RelativeLayout01" android:layout_height="wrap_content" android:background="@android:drawable/bottom_bar" android:layout_width="fill_parent" android:layout_gravity="bottom">
+		<Button android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_centerVertical="true" android:layout_marginLeft="30px" android:minWidth="100dip" android:text="닫기" android:layout_alignParentLeft="false" android:layout_centerInParent="true" android:id="@+id/result_ok"></Button>
+	</RelativeLayout>
+</LinearLayout>

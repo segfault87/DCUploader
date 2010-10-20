@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	<string-array name="image_size_threshold_entries">
+		<item>100 KB</item>
+		<item>200 KB</item>
+		<item>300 KB</item>
+		<item>400 KB</item>
+		<item>500 KB</item>
+	</string-array>
+	<string-array name="image_size_threshold_entry_values" translatable="false">
+		<item>100000</item>
+		<item>200000</item>
+		<item>300000</item>
+		<item>400000</item>
+		<item>500000</item>
+	</string-array>
+	<string-array name="image_resize_resolution_entries">
+		<item>320 pixels</item>
+		<item>640 pixels</item>
+		<item>960 pixels</item>
+		<item>1024 pixels</item>
+		<item>1280 pixels</item>
+	</string-array>
+	<string-array name="image_resize_resolution_entry_values" translatable="false">
+		<item>320</item>
+		<item>640</item>
+		<item>960</item>
+		<item>1024</item>
+		<item>1280</item>
+	</string-array>
+	<string-array name="image_quality_entries">
+		<item>낮음</item>
+		<item>중간</item>
+		<item>높음</item>
+		<item>매우 높음</item>
+	</string-array>
+	<string-array name="image_quality_entry_values" translatable="false">
+		<item>70</item>
+		<item>80</item>
+		<item>90</item>
+		<item>95</item>
+	</string-array>
+	<string-array name="mobile_providers">
+		<item>박스웹</item>
+		<item>물조</item>
+	</string-array>
+	<string-array name="mobile_provider_values" translatable="false" >
+		<item>boxweb</item>
+		<item>moolzo</item>
+	</string-array>
+	<string-array name="destinations">
+		<item>항상 묻기</item>
+		<item>디시인사이드</item>
+		<item>모바일 페이지</item>
+	</string-array>
+	<string-array name="destination_values" translatable="false">
+		<item>ask_always</item>
+		<item>dcinside</item>
+		<item>mobile</item>
+	</string-array>
+</resources>

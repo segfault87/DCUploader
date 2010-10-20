@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout android:id="@+id/LinearLayout01" android:layout_width="fill_parent" android:orientation="vertical" android:layout_height="fill_parent" xmlns:android="http://schemas.android.com/apk/res/android">
+	<ScrollView android:id="@+id/ScrollView01" android:layout_width="fill_parent" android:layout_height="wrap_content" android:layout_weight="1">
+		<LinearLayout android:id="@+id/LinearLayout01" android:layout_width="fill_parent" android:orientation="vertical" android:layout_height="wrap_content">
+			<LinearLayout android:id="@+id/LinearLayout01" android:layout_width="fill_parent" android:orientation="horizontal" android:layout_height="fill_parent" android:layout_weight="1">
+				<LinearLayout android:id="@+id/LinearLayout01" android:layout_height="wrap_content" android:orientation="vertical" android:layout_width="fill_parent" android:layout_weight="14" android:layout_marginRight="3dip">
+					<TextView android:id="@+id/TextView01" android:layout_height="wrap_content" android:text="갤러리 선택" android:layout_width="fill_parent" android:background="@android:drawable/dark_header" android:gravity="center_vertical" android:layout_marginBottom="5dip"></TextView>
+					<LinearLayout android:id="@+id/LinearLayout04" android:layout_height="wrap_content" android:layout_width="fill_parent">
+						<EditText android:layout_height="wrap_content" android:id="@+id/upload_target" android:editable="false" android:singleLine="false" android:ellipsize="end" android:hint="눌러서 선택하세요." android:layout_width="wrap_content" android:layout_weight="1"></EditText>
+						<Button android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/upload_visit" android:text="가기"></Button>
+					</LinearLayout>
+					<TextView android:id="@+id/TextView01" android:layout_height="wrap_content" android:text="내용 입력" android:background="@android:drawable/dark_header" android:layout_width="fill_parent" android:gravity="center_vertical" android:layout_marginBottom="5dip" android:layout_marginTop="5dip"></TextView>
+					<EditText android:layout_height="wrap_content" android:layout_width="fill_parent" android:id="@+id/upload_title" android:hint="제목을 입력하세요." android:maxLength="40"></EditText>
+					<EditText android:layout_width="fill_parent" android:inputType="textMultiLine" android:id="@+id/upload_text" android:hint="본문을 입력하세요." android:layout_height="wrap_content" android:minLines="3"></EditText>
+				</LinearLayout>
+				<LinearLayout android:id="@+id/LinearLayout01" android:layout_height="wrap_content" android:orientation="vertical" android:layout_width="fill_parent" android:layout_weight="16" android:layout_marginLeft="3dip">
+					<TextView android:id="@+id/TextView01" android:layout_height="wrap_content" android:text="이미지 선택" android:layout_width="fill_parent" android:background="@android:drawable/dark_header" android:gravity="center_vertical" android:layout_marginBottom="5dip"></TextView>
+					<LinearLayout android:id="@+id/LinearLayout03" android:layout_height="wrap_content" android:layout_width="fill_parent">
+						<Button android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="사진 찍기" android:id="@+id/upload_photo_take" android:layout_weight="1"></Button>
+						<Button android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="추가" android:id="@+id/upload_photo_add" android:layout_weight="1"></Button>
+						<Button android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/upload_photo_delete" android:text="삭제" android:layout_weight="1"></Button>
+					</LinearLayout>
+					<Gallery android:id="@+id/upload_images" android:layout_width="fill_parent" android:layout_height="wrap_content"></Gallery>
+					<TextView android:id="@+id/TextView01" android:layout_height="wrap_content" android:text="기타 옵션" android:layout_width="fill_parent" android:background="@android:drawable/dark_header" android:gravity="center_vertical" android:layout_marginTop="5dip" android:layout_marginBottom="5dip"></TextView>
+					<LinearLayout android:id="@+id/LinearLayout02" android:layout_height="wrap_content" android:layout_width="fill_parent" android:orientation="horizontal">
+						<CheckBox android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_weight="1" android:text="현재 위치 첨부" android:id="@+id/upload_enclose_position"></CheckBox>
+						<ProgressBar android:layout_width="wrap_content" android:layout_height="wrap_content" android:visibility="invisible" android:id="@+id/upload_location_progress"></ProgressBar>
+					</LinearLayout>
+					<CheckBox android:layout_width="fill_parent" android:layout_height="wrap_content" android:text="장치명 첨부" android:id="@+id/upload_enclose_model"></CheckBox>
+				</LinearLayout>
+			</LinearLayout>
+		</LinearLayout>
+	</ScrollView>
+	<RelativeLayout android:id="@+id/RelativeLayout01" android:layout_height="wrap_content" android:background="@android:drawable/bottom_bar" android:layout_width="fill_parent" android:layout_gravity="bottom">
+		<Button android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="확인" android:layout_alignParentLeft="true" android:layout_centerVertical="true" android:layout_marginLeft="30px" android:id="@+id/upload_ok" android:minWidth="200dip"></Button>
+		<Button android:layout_toRightOf="@+id/Button01" android:layout_height="wrap_content" android:layout_width="wrap_content" android:text="취소" android:layout_centerVertical="true" android:layout_alignParentRight="true" android:layout_marginRight="30px" android:id="@+id/upload_cancel" android:minWidth="200dip"></Button>
+	</RelativeLayout>
+</LinearLayout>

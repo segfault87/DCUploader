@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+	<item android:title="환경 설정" android:icon="@android:drawable/ic_menu_preferences" android:id="@+id/menu_uploader_preferences"></item>
+	<item android:title="로그아웃" android:id="@+id/menu_uploader_sign_off" android:icon="@android:drawable/ic_menu_close_clear_cancel"></item>
+</menu>
