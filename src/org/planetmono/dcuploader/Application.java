@@ -40,15 +40,18 @@ public class Application extends android.app.Application {
 	public static final String APP = "dcuploader";
 	
 	public static final String HOST_DCINSIDE = "gall.dcinside.com";
-	public static final String HOST_BOXWEB = "m.boxweb.net";
+	public static final String HOST_BOXWEB_OLD = "m.boxweb.net";
+	public static final String HOST_BOXWEB = "dc.boxweb.net";
 	public static final String HOST_MOOLZO = "dc.m.oolzo.com";
 	
 	public static final String URL_LIST_DCINSIDE = "http://gall.dcinside.com/list.php";
-	public static final String URL_LIST_BOXWEB = "http://m.boxweb.net/c/dc/list.php";
+	public static final String URL_LIST_BOXWEB = "http://dc.boxweb.net/list.php";
+	public static final String URL_LIST_BOXWEB_OLD = "http://m.boxweb.net/c/dc/list.php";
 	public static final String URL_LIST_MOOLZO = "http://dc.m.oolzo.com/List.aspx";
 	
 	public static final String URL_VIEW_DCINSIDE = URL_LIST_DCINSIDE;
 	public static final String URL_VIEW_BOXWEB = URL_LIST_BOXWEB;
+	public static final String URL_VIEW_BOXWEB_OLD = URL_LIST_BOXWEB_OLD;
 	public static final String URL_VIEW_MOOLZO = "http://dc.m.oolzo.com/View.aspx";
 	
 	private static final int TIMEOUT_CONNECTION = 15000;
@@ -63,6 +66,7 @@ public class Application extends android.app.Application {
 	public static final int DESTINATION_BOXWEB = 1;
 	public static final int DESTINATION_DCINSIDE = 2;
 	public static final int DESTINATION_MOOLZO = 3;
+	public static final int DESTINATION_BOXWEB_OLD = 4;
 	
 	private DefaultHttpClient client;
 	

@@ -25,6 +25,11 @@
 package org.planetmono.dcuploader;
 
 import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.regex.Matcher;
@@ -62,6 +67,7 @@ public class ActivityGalleryChooser extends Activity {
 	
 	private GenericProgressHandler progressHandler = new GenericProgressHandler(this, "갤러리 목록 수신중", "오래 걸립니다. 잠시만 기다려 주십시오.");
 	
+	private static String REFERER_URL = "http://gall.dcinside.com";
 	private static String GALLERY_LISTS[] = {
 		"http://gall.dcinside.com",
 		"http://wstatic.dcinside.com/gallery/gallindex_iframe_new.html"
@@ -80,6 +86,8 @@ public class ActivityGalleryChooser extends Activity {
 		public void fetchPage(String url) {
 			Application app = (Application)ActivityGalleryChooser.this.getApplication();
 			HttpGet get = new HttpGet(url);
+			
+			get.setHeader("Referer", REFERER_URL);
 			
 			Log.d(Application.TAG, "fetching " + url);
 			
@@ -105,9 +113,49 @@ public class ActivityGalleryChooser extends Activity {
 			HttpEntity entity = response.getEntity();
 			BufferedReader r;
 			
+			File of;
+			FileOutputStream osf;
+			InputStream is;
+			try {
+				of = File.createTempFile("dcuploader_gallery_list_", ".html");
+				osf = new FileOutputStream(of);
+				is = entity.getContent();
+			} catch (IOException e1) {
+				e1.printStackTrace();
+				return;
+			}
+			
+			byte[] inpbuf = new byte[256];
+			int nread;
+			
+			while (true) {
+				try {
+					nread = is.read(inpbuf);
+				} catch (IOException e) {
+					e.printStackTrace();
+					break;
+				}
+				
+				if (nread <= 0)
+					break;
+				
+				try {
+					osf.write(inpbuf, 0, nread);
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+			
+			try {
+				entity.consumeContent();
+				osf.close();
+			} catch (IOException e1) {
+				e1.printStackTrace();
+			}
+			
 			String key, value;
 			try {
-				r = new BufferedReader(new InputStreamReader(entity.getContent(), "utf-8"));
+				r = new BufferedReader(new InputStreamReader(new FileInputStream(of), "utf-8"));
 				
 				while (true) {
 					String line = r.readLine();
@@ -146,11 +194,15 @@ public class ActivityGalleryChooser extends Activity {
 						}
 					}
 				}
+				
+				r.close();
 			} catch (Exception e) {
 				progressHandler.error(e.toString());
 				
 				return;
 			}
+			
+			of.delete();
 		}
 	};
 	

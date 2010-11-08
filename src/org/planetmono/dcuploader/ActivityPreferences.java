@@ -183,6 +183,8 @@ public class ActivityPreferences extends PreferenceActivity {
 		resetAddToProvider();
 		
 		if (itemMobilePageProvider.equals("moolzo"))
+			choice = 2;
+		else if (itemMobilePageProvider.equals("boxweb_old"))
 			choice = 1;
 		else
 			choice = 0;

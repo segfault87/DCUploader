@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<manifest xmlns:android="http://schemas.android.com/apk/res/android" android:versionName="@string/version" package="org.planetmono.dcuploader" android:installLocation="auto" android:versionCode="16">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android" android:versionName="@string/version" package="org.planetmono.dcuploader" android:installLocation="auto" android:versionCode="18">
 	<application android:icon="@drawable/icon" android:label="@string/app_name" android:name="Application">
 		<activity android:name="ActivityImageDownloader" android:label="이미지 다운로드" android:configChanges="keyboard|keyboardHidden|orientation" android:theme="@android:style/Theme.Dialog">
 			<intent-filter>
@@ -39,6 +39,7 @@
 				<category android:name="android.intent.category.DEFAULT" />
 				<category android:name="android.intent.category.BROWSABLE" />
 				<data android:scheme="http" android:host="*.boxweb.net" android:pathPrefix="/c/dc/new.php"/>
+				<data android:scheme="http" android:host="dc.boxweb.net" android:pathPrefix="/new.php"/>
 			</intent-filter>
 			<intent-filter>
 				<action android:name="android.intent.action.VIEW" />

@@ -117,10 +117,7 @@ public class ActivityUploader extends Activity {
 	private String mobilePageProvider;
 	private String pageDestination;
 
-	private ArrayList<Uri> contents = new ArrayList<Uri>();
 	private ArrayList<Bitmap> bitmaps = new ArrayList<Bitmap>();
-	private ArrayList<String> tempFiles = new ArrayList<String>();
-	private String target = null;
 	private String postfix = "";
 	private String mapstring = "";
 	private int destination = 0;
@@ -128,7 +125,12 @@ public class ActivityUploader extends Activity {
 	private boolean called = false;
 	private boolean passThrough = false;
 	private boolean galleryChanged = false;
+	
+	/* must be kept */
 	private File tempFile = null;
+	private String target = null;
+	private ArrayList<Uri> contents = new ArrayList<Uri>();
+	private ArrayList<String> tempFiles = new ArrayList<String>();
 
 	/* progress dialogs */
 	private GenericProgressHandler uploadProgressDialog = new GenericProgressHandler(
@@ -173,17 +175,30 @@ public class ActivityUploader extends Activity {
 			EditText title, contents;
 			title = (EditText) findViewById(R.id.upload_title);
 			contents = (EditText) findViewById(R.id.upload_text);
-
-			if (target == null || title.getText().length() == 0
-					|| contents.getText().length() == 0) {
+			
+			DialogInterface.OnClickListener simpleCloser = new DialogInterface.OnClickListener() {
+				public void onClick(DialogInterface dialog, int which) {
+					dialog.dismiss();
+				}
+			};
+			
+			if (target == null) {
+				((EditText)findViewById(R.id.upload_target)).setText("");
+				
 				new AlertDialog.Builder(ActivityUploader.this).setTitle("오류")
-						.setMessage("내용을 입력해 주십시오.").setNeutralButton("확인",
-								new DialogInterface.OnClickListener() {
-									public void onClick(DialogInterface dialog,
-											int which) {
-										dialog.dismiss();
-									}
-								}).show();
+					.setMessage("갤러리를 선택해 주십시오.")
+					.setNeutralButton("확인", simpleCloser)
+					.show();
+				
+				return;
+			}
+
+			if (title.getText().length() == 0 || contents.getText().length() == 0) {
+				new AlertDialog.Builder(ActivityUploader.this).setTitle("오류")
+					.setMessage("내용을 입력해 주십시오.")
+					.setNeutralButton("확인", simpleCloser)
+					.show();
+				
 				return;
 			}
 
@@ -955,11 +970,6 @@ public class ActivityUploader extends Activity {
 			registerForContextMenu(uploadTarget);
 		}
 
-		if (passThrough || target == null)
-			uploadVisit.setEnabled(false);
-		else
-			uploadVisit.setEnabled(true);
-
 		uploadTarget.setOnClickListener(new OnClickListener() {
 			public void onClick(View v) {
 				if (!passThrough)
@@ -996,10 +1006,9 @@ public class ActivityUploader extends Activity {
 
 		uploadPhotoAdd.setOnClickListener(new OnClickListener() {
 			public void onClick(View v) {
-				Intent i = new Intent(
-						Intent.ACTION_PICK,
-						android.provider.MediaStore.Images.Media.INTERNAL_CONTENT_URI);
+				Intent i = new Intent(Intent.ACTION_GET_CONTENT);
 				i.setType("image/*");
+				i.addCategory(Intent.CATEGORY_DEFAULT);
 
 				startActivityForResult(i, Application.ACTION_ADD_PHOTO);
 			}
@@ -1108,11 +1117,28 @@ public class ActivityUploader extends Activity {
 		else {
 			if (mobilePageProvider.equals("moolzo"))
 				uri = Uri.parse(Application.URL_LIST_MOOLZO + queryString);
+			else if (mobilePageProvider.equals("boxweb_old"))
+				uri = Uri.parse(Application.URL_LIST_BOXWEB_OLD + queryString);
 			else
 				uri = Uri.parse(Application.URL_LIST_BOXWEB + queryString);
 		}
 
 		startActivity(new Intent(Intent.ACTION_VIEW, uri));
+	}
+	
+	private void resolveTarget(String id) {
+		target = id;
+
+		DatabaseHelper db = new DatabaseHelper(this);
+		String title = db.getTitle(id);
+		db.close();
+
+		if (title.length() > 0)
+			((EditText) findViewById(R.id.upload_target))
+					.setText(title + " (" + id + ")");
+		else
+			((EditText) findViewById(R.id.upload_target))
+					.setText(target);
 	}
 
 	/*
@@ -1125,21 +1151,50 @@ public class ActivityUploader extends Activity {
 		
 		if (tempFile != null)
 			outState.putString("tempfile", tempFile.getAbsolutePath());
+		if (target != null)
+			outState.putString("target", target);
+		if (tempFiles.size() > 0)
+			outState.putStringArrayList("tempfiles", tempFiles);
+		if (contents.size() > 0) {
+			String[] carr = new String[contents.size()];
+			
+			int t = 0;
+			for (Uri u : contents)
+				carr[t++] = u.toString();
+			
+			outState.putStringArray("contents", carr);
+		}
 	}
 
 	@SuppressWarnings("unchecked")
 	@Override
 	public void onCreate(Bundle savedState) {
 		super.onCreate(savedState);
-		
-		if (savedState != null) {
-			if (savedState.containsKey("tempfile"))
-				tempFile = new File(savedState.getString("tempfile"));
-		}
 
 		initViews();
 		if (formLocation)
 			queryLocation(true);
+		
+		if (savedState != null) {
+			if (savedState.containsKey("tempfile"))
+				tempFile = new File(savedState.getString("tempfile"));
+			if (savedState.containsKey("target"))
+				resolveTarget(savedState.getString("target"));
+			if (savedState.containsKey("tempfiles"))
+				tempFiles = savedState.getStringArrayList("tempfiles");
+			if (savedState.containsKey("contents")) {
+				contents = new ArrayList<Uri>();
+				String[] carr = savedState.getStringArray("contents");
+				for (String s : carr)
+					contents.add(Uri.parse(s));
+			}
+		}
+		
+		Button uploadVisit = (Button) findViewById(R.id.upload_visit);
+		if (passThrough || target == null)
+			uploadVisit.setEnabled(false);
+		else
+			uploadVisit.setEnabled(true);
 
 		/* populate data by getting STREAM parameter */
 		Intent i = getIntent();
@@ -1206,23 +1261,16 @@ public class ActivityUploader extends Activity {
 				Matcher m = p.matcher(uri.toString());
 
 				if (m.find()) {
-					DatabaseHelper db = new DatabaseHelper(this);
-
-					target = m.group(1);
-					String title = db.getTitle(target);
-
-					if (title.length() > 0)
-						((EditText) findViewById(R.id.upload_target))
-								.setText(title + " (" + target + ")");
-					else
-						((EditText) findViewById(R.id.upload_target))
-								.setText(target);
+					resolveTarget(m.group(1));
 				} else {
 					passThrough = false;
 				}
 
 				if (uri.getHost().equals(Application.HOST_BOXWEB)) {
 					destination = Application.DESTINATION_BOXWEB;
+					postfix = "<br /><br />from m.boxweb.net w/ <a href=\"http://palladium.planetmono.org/dcuploader\">DCUploader</a>";
+				} else if (uri.getHost().equals(Application.HOST_BOXWEB_OLD)) {
+					destination = Application.DESTINATION_BOXWEB_OLD;
 					postfix = "<br /><br />from m.boxweb.net w/ <a href=\"http://palladium.planetmono.org/dcuploader\">DCUploader</a>";
 				} else if (uri.getHost().equals(Application.HOST_MOOLZO)) {
 					destination = Application.DESTINATION_MOOLZO;
@@ -1387,6 +1435,7 @@ public class ActivityUploader extends Activity {
 
 			DatabaseHelper db = new DatabaseHelper(ActivityUploader.this);
 			db.getFavorites(ids, names);
+			db.close();
 
 			menu.setHeaderTitle("갤러리 선택");
 			for (int i = 0; i < names.size(); ++i)
@@ -1429,11 +1478,8 @@ public class ActivityUploader extends Activity {
 
 				return true;
 			default:
-				((EditText) findViewById(R.id.upload_target)).setText(names
-						.get(id)
-						+ " (" + ids.get(id) + ")");
-				target = ids.get(id);
-
+				resolveTarget(ids.get(id));
+				
 				setDefaultImage();
 
 				if (!passThrough)

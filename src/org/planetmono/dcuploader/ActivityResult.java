@@ -101,6 +101,7 @@ public class ActivityResult extends Activity {
 		
 		String urlDcinside = Application.URL_VIEW_DCINSIDE + querymsg;
 		String urlBoxweb = Application.URL_VIEW_BOXWEB + querymsg;
+		String urlBoxwebOld = Application.URL_VIEW_BOXWEB_OLD + querymsg;
 		String urlMoolzo = Application.URL_VIEW_MOOLZO + querymsg;
 		
 		if (destination == Application.DESTINATION_BOXWEB) {
@@ -114,6 +115,10 @@ public class ActivityResult extends Activity {
 		} else if (destination == Application.DESTINATION_MOOLZO) {
 			finish();
 			startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(urlMoolzo)));
+			return;
+		} else if (destination == Application.DESTINATION_BOXWEB_OLD) {
+			finish();
+			startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(urlBoxwebOld)));
 			return;
 		}
 		
@@ -138,6 +143,9 @@ public class ActivityResult extends Activity {
 		if (mobilePageProvider.equals("moolzo")) {
 			((TextView)findViewById(R.id.result_mobile_text)).setText("모바일 (물조)");
 			urlMobile = urlMoolzo;
+		} else if (mobilePageProvider.equals("boxweb_old")) {
+			((TextView)findViewById(R.id.result_mobile_text)).setText("모바일 (박스웹)");
+			urlMobile = urlBoxwebOld;
 		} else {
 			((TextView)findViewById(R.id.result_mobile_text)).setText("모바일 (박스웹)");
 			urlMobile = urlBoxweb;
