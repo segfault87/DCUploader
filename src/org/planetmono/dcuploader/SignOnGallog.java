@@ -47,6 +47,8 @@ import android.util.Log;
 public class SignOnGallog implements SignOnBase {
 	private static final String SIGNON_URL = "http://dcid.dcinside.com/join/member_check.php";
 	private static final String SIGNOFF_URL = "http://dcid.dcinside.com/join/logout.php";
+	private static final String SIGNON_BASE_URL = "http://dcid.dcinside.com";
+	private static final String SIGNON_PAGE_URL = "http://dcid.dcinside.com/join/login.php";
 	
 	public Runnable getMethodSignOn(final Application app, final Bundle b, final Handler resultHandler) {
 		return new Runnable() {
@@ -73,6 +75,9 @@ public class SignOnGallog implements SignOnBase {
 				} catch (UnsupportedEncodingException e) {
 					e.printStackTrace();
 				}
+				
+				post.setHeader("Origin", SIGNON_BASE_URL);
+				post.setHeader("Referer", SIGNON_PAGE_URL);
 				
 				HttpResponse response = null;
 				try {
