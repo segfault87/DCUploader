@@ -22,7 +22,6 @@
 				<CheckBox android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_weight="1" android:text="현재 위치 첨부" android:id="@+id/upload_enclose_position"></CheckBox>
 				<ProgressBar android:layout_width="wrap_content" android:layout_height="wrap_content" android:visibility="invisible" android:id="@+id/upload_location_progress"></ProgressBar>
 			</LinearLayout>
-			<CheckBox android:layout_width="fill_parent" android:layout_height="wrap_content" android:text="장치명 첨부" android:id="@+id/upload_enclose_model"></CheckBox>
 		</LinearLayout>
 	</ScrollView>
 	<RelativeLayout android:id="@+id/RelativeLayout01" android:layout_height="wrap_content" android:background="@android:drawable/bottom_bar" android:layout_width="fill_parent" android:layout_gravity="bottom">

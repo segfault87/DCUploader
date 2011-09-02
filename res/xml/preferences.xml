@@ -17,11 +17,16 @@
 	<PreferenceCategory android:key="downloader_settings" android:title="다운로더 설정">
 		<EditTextPreference android:summary="이미지의 다운로드 경로를 설정합니다." android:title="다운로드 경로" android:key="download_path" android:defaultValue="dcdownloader"></EditTextPreference><CheckBoxPreference android:defaultValue="true" android:summary="다운로드받은 이미지를 미디어 라이브러리에 추가합니다." android:title="미디어 라이브러리에 추가" android:key="add_to_provider"></CheckBoxPreference>
 	</PreferenceCategory>
+	<PreferenceCategory android:title="서명 설정" android:key="sign_settings">
+		<CheckBoxPreference android:defaultValue="true" android:summary="글의 말미에 서명을 삽입합니다." android:title="서명" android:key="signature"></CheckBoxPreference>
+		<CheckBoxPreference android:defaultValue="false" android:summary="사용자 정의 서명을 삽입합니다." android:title="사용자 정의 서명 사용" android:key="use_custom_signature" android:dependency="signature"></CheckBoxPreference>
+		<EditTextPreference android:title="사용자 정의 서명" android:key="custom_signature" android:dependency="use_custom_signature"></EditTextPreference>
+		<CheckBoxPreference android:key="always_enclose_model" android:defaultValue="false" android:title="단말기 정보 첨부" android:summary="언제나 현재 사용중인 단말기의 정보를 글에 삽입합니다." android:dependency="signature"></CheckBoxPreference>
+	</PreferenceCategory>
 	<PreferenceCategory android:title="기타 설정" android:key="etc_settings">
 		<ListPreference android:summary="디시인사이드의 모바일 페이지 제공자를 선택합니다." android:key="mobile_page_provider" android:title="모바일 서비스 제공자" android:entryValues="@array/mobile_provider_values" android:entries="@array/mobile_providers"></ListPreference>
 		<ListPreference android:entryValues="@array/destination_values" android:key="destination" android:entries="@array/destinations" android:summary="'가기' 버튼을 눌렀을 시 바로 연결되는 서비스를 선택합니다." android:title="기본 서비스 선택"></ListPreference>
 		<CheckBoxPreference android:defaultValue="false" android:summary="언제나 현재 위치 정보를 글에 삽입합니다." android:title="항상 위치 첨부" android:key="always_enclose_position"></CheckBoxPreference>
-		<CheckBoxPreference android:key="always_enclose_model" android:defaultValue="false" android:title="항상 단말기 정보 첨부" android:summary="언제나 현재 사용중인 단말기의 정보를 글에 삽입합니다."></CheckBoxPreference>
 	</PreferenceCategory>
 	<PreferenceCategory android:title="정보" android:key="pref_info">
 		<Preference android:summary="@string/version" android:key="version" android:title="버젼" android:selectable="false"></Preference>

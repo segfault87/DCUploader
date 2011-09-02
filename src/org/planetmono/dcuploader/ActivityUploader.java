@@ -143,7 +143,10 @@ public class ActivityUploader extends Activity {
 	String formTitle = null;
 	String formBody = null;
 	boolean formLocation = false;
-	boolean formModel = false;
+	
+	private boolean sign = true;
+	private String customSign = null;
+	private boolean signModel = false;
 
 	/* Location listener */
 	private boolean locationEnabled = false;
@@ -356,14 +359,24 @@ public class ActivityUploader extends Activity {
 		formLocation = pref.getBoolean(
 				ActivityPreferences.KEY_ALWAYS_ENCLOSE_POSITION,
 				ActivityPreferences.DEFAULT_ALWAYS_ENCLOSE_POSITION);
-		formModel = pref.getBoolean(
+		
+		
+		sign = pref.getBoolean(
+				ActivityPreferences.KEY_SIGNATURE,
+				ActivityPreferences.DEFAULT_SIGNATURE);
+		boolean use_custom_signature = pref.getBoolean(
+				ActivityPreferences.KEY_USE_CUSTOM_SIGNATURE,
+				ActivityPreferences.DEFAULT_USE_CUSTOM_SIGNATURE);
+		if (use_custom_signature)
+			customSign = pref.getString(
+					ActivityPreferences.KEY_CUSTOM_SIGNATURE,
+					"");
+		signModel = pref.getBoolean(
 				ActivityPreferences.KEY_ALWAYS_ENCLOSE_MODEL,
 				ActivityPreferences.DEFAULT_ALWAYS_ENCLOSE_MODEL);
 
 		((CheckBox) findViewById(R.id.upload_enclose_position))
 				.setChecked(formLocation);
-		((CheckBox) findViewById(R.id.upload_enclose_model))
-				.setChecked(formModel);
 	}
 
 	private void resetThumbnails() {
@@ -819,12 +832,27 @@ public class ActivityUploader extends Activity {
 			EditText contents = (EditText) findViewById(R.id.upload_text);
 			String cstr = contents.getText().toString().trim().replace("<",
 					"&lt;").replace(">", "&gt;").replace("\n", "<br />");
+			
+			String postfix_;
+			if (sign) {
+				postfix_ = "<br /><br />";
+				
+				if (customSign != null)
+					postfix_ += customSign;
+				else
+					postfix_ += postfix;
+				
+				if (signModel)
+					postfix_ += STAMP_MODEL;
+			} else {
+				postfix_ = "";
+			}
 
 			try {
 				entity.addPart("subject", new StringBody(subject.getText()
 						.toString(), Charset.forName("utf-8")));
 				entity.addPart("memo", new StringBody(cstr + mapstring
-						+ postfix + (formModel ? STAMP_MODEL : ""), Charset
+						+ postfix_, Charset
 						.forName("utf-8")));
 			} catch (Exception e) {
 			}
@@ -957,7 +985,6 @@ public class ActivityUploader extends Activity {
 		Button uploadPhotoAdd = (Button) findViewById(R.id.upload_photo_add);
 		Button uploadPhotoDelete = (Button) findViewById(R.id.upload_photo_delete);
 		CheckBox uploadEnclosePosition = (CheckBox) findViewById(R.id.upload_enclose_position);
-		CheckBox uploadEncloseModel = (CheckBox) findViewById(R.id.upload_enclose_model);
 		Button uploadOk = (Button) findViewById(R.id.upload_ok);
 		Button uploadCancel = (Button) findViewById(R.id.upload_cancel);
 
@@ -1057,16 +1084,6 @@ public class ActivityUploader extends Activity {
 					}
 				});
 
-		uploadEncloseModel.setChecked(formModel);
-
-		uploadEncloseModel
-				.setOnCheckedChangeListener(new OnCheckedChangeListener() {
-					public void onCheckedChanged(CompoundButton buttonView,
-							boolean isChecked) {
-						formModel = isChecked;
-					}
-				});
-
 		/* restore data when orientation changes */
 		if (formGallery != null) {
 			if (target != null) {
@@ -1117,10 +1134,8 @@ public class ActivityUploader extends Activity {
 		else {
 			if (mobilePageProvider.equals("moolzo"))
 				uri = Uri.parse(Application.URL_LIST_MOOLZO + queryString);
-			else if (mobilePageProvider.equals("boxweb_old"))
-				uri = Uri.parse(Application.URL_LIST_BOXWEB_OLD + queryString);
 			else
-				uri = Uri.parse(Application.URL_LIST_BOXWEB + queryString);
+				uri = Uri.parse(Application.URL_LIST_DCMYS + queryString);
 		}
 
 		startActivity(new Intent(Intent.ACTION_VIEW, uri));
@@ -1190,6 +1205,8 @@ public class ActivityUploader extends Activity {
 			}
 		}
 		
+		postfix = "from <a href=\"http://palladium.planetmono.org/dcuploader\">DCUploader</a>";
+		
 		Button uploadVisit = (Button) findViewById(R.id.upload_visit);
 		if (passThrough || target == null)
 			uploadVisit.setEnabled(false);
@@ -1200,8 +1217,6 @@ public class ActivityUploader extends Activity {
 		Intent i = getIntent();
 		Bundle b = i.getExtras();
 		String action = i.getAction();
-
-		postfix = "<br /><br />from <a href=\"http://palladium.planetmono.org/dcuploader\">DCUploader</a>";
 
 		if (action.equals(Intent.ACTION_SEND)
 				|| action.equals(Intent.ACTION_SEND_MULTIPLE)) {
@@ -1266,19 +1281,16 @@ public class ActivityUploader extends Activity {
 					passThrough = false;
 				}
 
-				if (uri.getHost().equals(Application.HOST_BOXWEB)) {
-					destination = Application.DESTINATION_BOXWEB;
-					postfix = "<br /><br />from m.boxweb.net w/ <a href=\"http://palladium.planetmono.org/dcuploader\">DCUploader</a>";
-				} else if (uri.getHost().equals(Application.HOST_BOXWEB_OLD)) {
-					destination = Application.DESTINATION_BOXWEB_OLD;
-					postfix = "<br /><br />from m.boxweb.net w/ <a href=\"http://palladium.planetmono.org/dcuploader\">DCUploader</a>";
+				if (uri.getHost().equals(Application.HOST_DCMYS)) {
+					destination = Application.DESTINATION_DCMYS;
+					postfix = "from dc.m.dcmys.kr w/ <a href=\"http://palladium.planetmono.org/dcuploader\">DCUploader</a>";
 				} else if (uri.getHost().equals(Application.HOST_MOOLZO)) {
 					destination = Application.DESTINATION_MOOLZO;
-					postfix = "<br /><br />- From m.oolzo.com w/ <a href=\"http://palladium.planetmono.org/dcuploader\">DCUploader</a>";
+					postfix = "- From m.oolzo.com w/ <a href=\"http://palladium.planetmono.org/dcuploader\">DCUploader</a>";
 				} else if (uri.getHost().equals(Application.HOST_DCINSIDE)) {
 					destination = Application.DESTINATION_DCINSIDE;
 				}
-
+				
 				setDefaultImage();
 			}
 		}
@@ -1456,7 +1468,7 @@ public class ActivityUploader extends Activity {
 				if (mobilePageProvider.equals("moolzo"))
 					dest = "물조";
 				else
-					dest = "박스웹";
+					dest = "DCmys";
 
 				menu.add(MENU_GROUP_VISIT, MENU_DCINSIDE, 0, "디시인사이드");
 				menu.add(MENU_GROUP_VISIT, MENU_MOBILE, 0, dest);

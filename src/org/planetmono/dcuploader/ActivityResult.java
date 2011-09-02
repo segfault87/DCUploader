@@ -97,16 +97,16 @@ public class ActivityResult extends Activity {
 		Intent i = getIntent();
 		
 		String querymsg = "?id=" + i.getStringExtra("target") + "&no=" + i.getIntExtra("no", 0);
+		String querymsgDcmys = "?id=" + i.getStringExtra("target") + "#no=" + i.getIntExtra("no", 0);
 		int destination = i.getIntExtra("destination", 0);
 		
 		String urlDcinside = Application.URL_VIEW_DCINSIDE + querymsg;
-		String urlBoxweb = Application.URL_VIEW_BOXWEB + querymsg;
-		String urlBoxwebOld = Application.URL_VIEW_BOXWEB_OLD + querymsg;
+		String urlDcmys = Application.URL_VIEW_DCMYS + querymsgDcmys;
 		String urlMoolzo = Application.URL_VIEW_MOOLZO + querymsg;
 		
-		if (destination == Application.DESTINATION_BOXWEB) {
+		if (destination == Application.DESTINATION_DCMYS) {
 			finish();
-			startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(urlBoxweb)));
+			startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(urlDcmys)));
 			return;
 		} else if (destination == Application.DESTINATION_DCINSIDE) {
 			finish();
@@ -115,10 +115,6 @@ public class ActivityResult extends Activity {
 		} else if (destination == Application.DESTINATION_MOOLZO) {
 			finish();
 			startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(urlMoolzo)));
-			return;
-		} else if (destination == Application.DESTINATION_BOXWEB_OLD) {
-			finish();
-			startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(urlBoxwebOld)));
 			return;
 		}
 		
@@ -143,13 +139,11 @@ public class ActivityResult extends Activity {
 		if (mobilePageProvider.equals("moolzo")) {
 			((TextView)findViewById(R.id.result_mobile_text)).setText("모바일 (물조)");
 			urlMobile = urlMoolzo;
-		} else if (mobilePageProvider.equals("boxweb_old")) {
-			((TextView)findViewById(R.id.result_mobile_text)).setText("모바일 (박스웹)");
-			urlMobile = urlBoxwebOld;
-		} else {
-			((TextView)findViewById(R.id.result_mobile_text)).setText("모바일 (박스웹)");
-			urlMobile = urlBoxweb;
-		}
+		} else if (mobilePageProvider.equals("dcmys")) {
+			((TextView)findViewById(R.id.result_mobile_text)).setText("모바일 (DCmys)");
+			urlMobile = urlDcmys;
+		} else
+			urlMobile = null;
 		
 		((Button)findViewById(R.id.result_pc_open_link)).setOnClickListener(new ActionOpenBrowser(urlDcinside));
 		((Button)findViewById(R.id.result_mobile_open_link)).setOnClickListener(new ActionOpenBrowser(urlMobile));

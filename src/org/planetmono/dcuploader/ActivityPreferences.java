@@ -75,29 +75,36 @@ public class ActivityPreferences extends PreferenceActivity {
 	public static final String DEFAULT_DOWNLOAD_PATH = "dcdownloader";
 	public static final String KEY_ADD_TO_PROVIDER = "add_to_provider";
 	
+	/* Signature category */
+	public static final String KEY_SIGNATURE = "signature";
+	public static final boolean DEFAULT_SIGNATURE = true;
+	public static final String KEY_USE_CUSTOM_SIGNATURE = "use_custom_signature";
+	public static final boolean DEFAULT_USE_CUSTOM_SIGNATURE = false;
+	public static final String KEY_CUSTOM_SIGNATURE = "custom_signature";
+	public static final String KEY_ALWAYS_ENCLOSE_MODEL = "always_enclose_model";
+	public static final boolean DEFAULT_ALWAYS_ENCLOSE_MODEL = false;
+	
 	/* Misc category */
 	public static final String KEY_MOBILE_PAGE_PROVIDER = "mobile_page_provider";
-	public static final String DEFAULT_MOBILE_PAGE_PROVIDER = "boxweb";
+	public static final String DEFAULT_MOBILE_PAGE_PROVIDER = "moolzo";
 	public static final String KEY_DESTINATION = "destination";
 	public static final String DEFAULT_DESTINATION = "ask_always";
 	public static final String KEY_ALWAYS_ENCLOSE_POSITION = "always_enclose_position";
 	public static final boolean DEFAULT_ALWAYS_ENCLOSE_POSITION = false;
-	public static final String KEY_ALWAYS_ENCLOSE_MODEL = "always_enclose_model";
-	public static final boolean DEFAULT_ALWAYS_ENCLOSE_MODEL = false;
 	
 	/* Etc. */
 	private static final String KEY_ABOUT_THIS_APP = "about_this_app";
 	
-	private static final String aboutString = "<h2>심심해서 만든 DCUploader</h2>" +
-			"(C)2010 Park \"segfault\" J. K.<br /><br />" +
+	private static final String aboutString = "<h2>DCUploader</h2>" +
+			"(C)2010-2011 Park \"segfault\" J. K.<br /><br />" +
 			"<p><a href='mailto:mastermind@planetmono.org'>mastermind@planetmono.org</a><br />" +
 			"<a href='http://planetmono.org'>http://planetmono.org</a><br />" +
 			"<a href='http://twitter.com/segfault87'>http://twitter.com/segfault87</a></p>" +
-			"프로젝트 홈페이지 : <a href='http://palladium.planetmono.org/dcuploader'>http://palladium.planetmono.org/dcuploader</a><br /><br />" +
+			"프로젝트 홈페이지 : <a href='http://dcuploader.influx.kr'>http://dcuploader.influx.kr</a><br /><br />" +
 			"segfault의 안드로이드 첫 번째 프로젝트입니다. 스터디하는 셈 치고 겸사겸사 만들었습니다.<br />" +
 			"만약 사용하다가 문제를 발견하셨다면 위 연락처로 알려주시면 감사하겠습니다.<br /><br />" +
-			"이 소프트웨어는 자유 소프트웨어입니다. 자세한 정보는 구글 코드의 프로젝트 페이지를 참고하십시오.<br />" +
-			"<a href='http://code.google.com/p/segfault-snippets'>http://code.google.com/p/segfault-snippets</a>";
+			"이 소프트웨어는 자유 소프트웨어입니다. 자세한 정보는 GitHub 프로젝트 페이지를 참고하십시오.<br />" +
+			"<a href='https://github.com/segfault87/DCUploader'>https://github.com/segfault87/DCUploader</a>";
 	
 	/* configuration items */
 	private boolean itemSaveIdPw = DEFAULT_SAVE_ID_PASSWORD;
@@ -106,10 +113,13 @@ public class ActivityPreferences extends PreferenceActivity {
 	private int itemMaximumResolution = DEFAULT_MAXIMUM_RESOLUTION;
 	private int itemImageQuality = DEFAULT_IMAGE_QUALITY;
 	private String itemDownloadPath = DEFAULT_DOWNLOAD_PATH;
+	private boolean itemSignature = DEFAULT_SIGNATURE;
+	private boolean itemUseCustomSignature = DEFAULT_USE_CUSTOM_SIGNATURE; 
+	private String itemCustomSignature = "";
+	private boolean itemAlwaysEncloseModel = DEFAULT_ALWAYS_ENCLOSE_MODEL;
 	private String itemMobilePageProvider = DEFAULT_MOBILE_PAGE_PROVIDER;
 	private String itemDestination = DEFAULT_DESTINATION;
 	private boolean itemAlwaysEnclosePosition = DEFAULT_ALWAYS_ENCLOSE_POSITION;
-	private boolean itemAlwaysEncloseModel = DEFAULT_ALWAYS_ENCLOSE_MODEL;
 	
 	private void resetConfigurableOptions() {
 		int choice = 0;
@@ -181,10 +191,20 @@ public class ActivityPreferences extends PreferenceActivity {
 		downloadPath.setText(itemDownloadPath);
 		
 		resetAddToProvider();
+				
+		CheckBoxPreference signature = (CheckBoxPreference)findPreference(KEY_SIGNATURE);
+		signature.setChecked(itemSignature);
+		
+		CheckBoxPreference useCustomSignature = (CheckBoxPreference)findPreference(KEY_USE_CUSTOM_SIGNATURE);
+		useCustomSignature.setChecked(itemUseCustomSignature);
+		
+		EditTextPreference customSignature = (EditTextPreference)findPreference(KEY_CUSTOM_SIGNATURE);
+		customSignature.setText(itemCustomSignature);
+		
+		CheckBoxPreference alwaysEncloseModel = (CheckBoxPreference)findPreference(KEY_ALWAYS_ENCLOSE_MODEL);
+		alwaysEncloseModel.setChecked(itemAlwaysEncloseModel);
 		
 		if (itemMobilePageProvider.equals("moolzo"))
-			choice = 2;
-		else if (itemMobilePageProvider.equals("boxweb_old"))
 			choice = 1;
 		else
 			choice = 0;
@@ -198,12 +218,8 @@ public class ActivityPreferences extends PreferenceActivity {
 			choice = 0;
 		((ListPreference)findPreference(KEY_DESTINATION)).setValueIndex(choice);
 		
-		
 		CheckBoxPreference alwaysEnclosePosition = (CheckBoxPreference)findPreference(KEY_ALWAYS_ENCLOSE_POSITION);
 		alwaysEnclosePosition.setChecked(itemAlwaysEnclosePosition);
-		
-		CheckBoxPreference alwaysEncloseModel = (CheckBoxPreference)findPreference(KEY_ALWAYS_ENCLOSE_MODEL);
-		alwaysEncloseModel.setChecked(itemAlwaysEncloseModel);
 	}
 	
 	private void resetAddToProvider() {
@@ -242,10 +258,13 @@ public class ActivityPreferences extends PreferenceActivity {
 		e.putInt(KEY_MAXIMUM_RESOLUTION, itemMaximumResolution);
 		e.putInt(KEY_IMAGE_QUALITY, itemImageQuality);
 		e.putString(KEY_DOWNLOAD_PATH, itemDownloadPath);
+		e.putBoolean(KEY_SIGNATURE, itemSignature);
+		e.putBoolean(KEY_USE_CUSTOM_SIGNATURE, itemUseCustomSignature);
+		e.putString(KEY_CUSTOM_SIGNATURE, itemCustomSignature);
+		e.putBoolean(KEY_ALWAYS_ENCLOSE_MODEL, itemAlwaysEncloseModel);
 		e.putString(KEY_MOBILE_PAGE_PROVIDER, itemMobilePageProvider);
 		e.putString(KEY_DESTINATION, itemDestination);
 		e.putBoolean(KEY_ALWAYS_ENCLOSE_POSITION, itemAlwaysEnclosePosition);
-		e.putBoolean(KEY_ALWAYS_ENCLOSE_MODEL, itemAlwaysEncloseModel);
 		e.commit();
 		
 		Log.d(Application.TAG, "changes committed.");
@@ -272,10 +291,14 @@ public class ActivityPreferences extends PreferenceActivity {
 		
 		itemDownloadPath = pref.getString(KEY_DOWNLOAD_PATH, DEFAULT_DOWNLOAD_PATH);
 		
+		itemSignature = pref.getBoolean(KEY_SIGNATURE, DEFAULT_SIGNATURE);
+		itemUseCustomSignature = pref.getBoolean(KEY_USE_CUSTOM_SIGNATURE, DEFAULT_USE_CUSTOM_SIGNATURE);
+		itemCustomSignature = pref.getString(KEY_CUSTOM_SIGNATURE, "");
+		itemAlwaysEncloseModel = pref.getBoolean(KEY_ALWAYS_ENCLOSE_MODEL, DEFAULT_ALWAYS_ENCLOSE_MODEL);
+		
 		itemMobilePageProvider = pref.getString(KEY_MOBILE_PAGE_PROVIDER, DEFAULT_MOBILE_PAGE_PROVIDER);
 		itemDestination = pref.getString(KEY_DESTINATION, DEFAULT_DESTINATION);
 		itemAlwaysEnclosePosition = pref.getBoolean(KEY_ALWAYS_ENCLOSE_POSITION, DEFAULT_ALWAYS_ENCLOSE_POSITION);
-		itemAlwaysEncloseModel = pref.getBoolean(KEY_ALWAYS_ENCLOSE_MODEL, DEFAULT_ALWAYS_ENCLOSE_MODEL);
 		
 		findPreference(KEY_SAVE_ID_PASSWORD).setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
 			public boolean onPreferenceChange(Preference preference, Object newValue) {
@@ -384,6 +407,34 @@ public class ActivityPreferences extends PreferenceActivity {
 			}
 		});
 		
+		findPreference(KEY_SIGNATURE).setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
+			public boolean onPreferenceChange(Preference preference, Object newValue) {
+				itemSignature = (Boolean)newValue;
+				return true;
+			}
+		});
+		
+		findPreference(KEY_USE_CUSTOM_SIGNATURE).setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
+			public boolean onPreferenceChange(Preference preference, Object newValue) {
+				itemUseCustomSignature = (Boolean)newValue;
+				return true;
+			}
+		});
+		
+		findPreference(KEY_CUSTOM_SIGNATURE).setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
+			public boolean onPreferenceChange(Preference preference, Object newValue) {
+				itemCustomSignature = (String)newValue;
+				return true;
+			}
+		});
+		
+		findPreference(KEY_ALWAYS_ENCLOSE_MODEL).setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
+			public boolean onPreferenceChange(Preference preference, Object newValue) {
+				itemAlwaysEncloseModel = (Boolean)newValue;
+				return true;
+			}
+		});
+		
 		findPreference(KEY_MOBILE_PAGE_PROVIDER).setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
 			public boolean onPreferenceChange(Preference preference, Object newValue) {
 				itemMobilePageProvider = (String)newValue;
@@ -401,13 +452,6 @@ public class ActivityPreferences extends PreferenceActivity {
 		findPreference(KEY_ALWAYS_ENCLOSE_POSITION).setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
 			public boolean onPreferenceChange(Preference preference, Object newValue) {
 				itemAlwaysEnclosePosition = (Boolean)newValue;
-				return true;
-			}
-		});
-		
-		findPreference(KEY_ALWAYS_ENCLOSE_MODEL).setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
-			public boolean onPreferenceChange(Preference preference, Object newValue) {
-				itemAlwaysEncloseModel = (Boolean)newValue;
 				return true;
 			}
 		});
