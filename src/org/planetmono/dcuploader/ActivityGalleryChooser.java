@@ -166,6 +166,9 @@ public class ActivityGalleryChooser extends Activity {
 					Pattern p = Pattern.compile("list.php\\?id=([\\-a-zA-Z0-9_]+)");
 					Matcher m = p.matcher(line);
 					
+					db.getWritableDatabase();
+					db.begin();
+					
 					while (m.find()) {
 						if (m.groupCount() > 0) {
 							key = m.group(1).trim();
@@ -188,11 +191,12 @@ public class ActivityGalleryChooser extends Activity {
 								value = value.substring(i).trim();
 							}
 							
-							db.getWritableDatabase();
 							db.insert(key, value);
-							db.close();
 						}
 					}
+					
+					db.end();
+					db.close();
 				}
 				
 				r.close();

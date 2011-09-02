@@ -163,6 +163,18 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 		return __dbctx;
 	}
 	
+	public void begin() {
+		SQLiteDatabase dbctx = getWritableDatabase();
+		
+		dbctx.beginTransaction();
+	}
+	
+	public void end() {
+		SQLiteDatabase dbctx = getWritableDatabase();
+		
+		dbctx.endTransaction();
+	}
+	
 	public void insert(String id, String name) {
 		if (contains(id))
 			return;
